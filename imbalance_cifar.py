@@ -49,6 +49,7 @@ class IMBALANCECIFAR10(torchvision.datasets.CIFAR10):
         self.targets = new_targets
         
     def get_cls_num_list(self):
+        # return how many samples per class
         cls_num_list = []
         for i in range(self.cls_num):
             cls_num_list.append(self.num_per_cls_dict[i])
@@ -75,6 +76,7 @@ class IMBALANCECIFAR100(IMBALANCECIFAR10):
         'md5': '7973b15100ade9c7d40fb424638fde48',
     }
     cls_num = 100
+
 
 
 if __name__ == '__main__':

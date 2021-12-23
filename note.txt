@@ -1,0 +1,29 @@
+run with CE 3 times and save them differently. train rule None
+
+train with Focal Loss 3 times
+
+LDAM 3 bar with None
+
+LDAM with train rule drw
+
+------------------------------------------
+
+Comment ou the original LDAM.
+
+LDAM 3 bar with None
+
+LDAM with train rule drw
+
+
+-----------------------------------------
+
+Create a dataloader for HAM10000 dataset that returns a list of samples per class
+
+run with CE 3 times and save them differently. train rule None
+
+train with Focal Loss 3 times
+
+LDAM 3 bar with None
+
+LDAM with train rule drw
+
