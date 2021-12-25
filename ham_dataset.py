@@ -36,7 +36,8 @@ np.random.seed(10)
 torch.manual_seed(10)
 torch.cuda.manual_seed(10)
 
-data_dir = "/home/sazzad/Documents/ISBI/HAM10000/"
+# data_dir = "/home/sazzad/Documents/ISBI/HAM10000/"
+data_dir = "./data/HAM10000/"
 all_image_path = glob(os.path.join(data_dir, '*', '*.jpg'))
 
 df = pd.read_csv(os.path.join(data_dir, 'HAM10000_metadata'))
@@ -65,7 +66,7 @@ df['cell_type'] = df['dx'].map(lesion_type_dict.get)
 df['cell_type_idx'] = pd.Categorical(df['dx']).codes
 df.tail()
 
-print(df['cell_type_idx'].value_counts())
+# print(df['cell_type_idx'].value_counts())
 
 # split dataset into train, test and validation
 df_trainval, df_test = train_test_split(df, test_size=0.1, random_state=101, stratify=df['cell_type_idx'])
@@ -97,7 +98,7 @@ class HAM10000(Dataset):
 
         return X, y
 
-input_size = 224
+input_size = 32
 norm_mean = (0.49139968, 0.48215827, 0.44653124)
 norm_std = (0.24703233, 0.24348505, 0.26158768)
 # define the transformation of the train images.
@@ -115,3 +116,18 @@ testset = HAM10000(df_test, transform=val_transform)
 
 def get_ham_dataset():
     return trainset, valset, testset
+
+
+cls_num_list = []
+for i in range(7):
+    cls_num_list.append(0)
+
+def get_cls_num_list():
+    for i in range((len(trainset))):
+        target = trainset[i][1]
+        cls_num_list[target]+=1
+    print(cls_num_list)
+    return cls_num_list
+    
+# print(cls_num_list)
+    

@@ -20,6 +20,7 @@ from sklearn.metrics import confusion_matrix
 from utils import *
 from imbalance_cifar import IMBALANCECIFAR10, IMBALANCECIFAR100
 from losses import LDAMLoss, FocalLoss
+import ham_dataset
 from ham_dataset import get_ham_dataset
 
 model_names = sorted(name for name in models.__dict__
@@ -103,9 +104,10 @@ def main_worker(gpu, ngpus_per_node, args):
 
     # create model
     print("=> creating model '{}'".format(args.arch))
-    num_classes = 100 if args.dataset == 'cifar100' else 10
+    num_classes = 7 if args.dataset == 'ham' else 10
     use_norm = True if args.loss_type == 'LDAM' else False
     model = models.__dict__[args.arch](num_classes=num_classes, use_norm=use_norm)
+    print('Number of Classes:', num_classes)
 
     if args.gpu is not None:
         torch.cuda.set_device(args.gpu)
@@ -158,11 +160,13 @@ def main_worker(gpu, ngpus_per_node, args):
         train_dataset = IMBALANCECIFAR100(root='./data', imb_type=args.imb_type, imb_factor=args.imb_factor, rand_number=args.rand_number, train=True, download=True, transform=transform_train)
         val_dataset = datasets.CIFAR100(root='./data', train=False, download=True, transform=transform_val)
     elif args.dataset == 'ham':
-        train_dataset, val_dataset, _ = get_ham_dataset()
+        train_dataset, val_dataset, test_dataset = get_ham_dataset()
     else:
         warnings.warn('Dataset is not listed')
         return
-    cls_num_list = train_dataset.get_cls_num_list()
+    
+    cls_num_list = ham_dataset.get_cls_num_list() if args.dataset == 'ham' else train_dataset.get_cls_num_list()
+    print(ham_dataset.get_cls_num_list)
     print('cls num list:')
     print(cls_num_list)
     args.cls_num_list = cls_num_list
